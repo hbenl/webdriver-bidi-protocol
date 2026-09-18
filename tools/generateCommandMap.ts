@@ -22,6 +22,16 @@ const specs: SpecType[] = [
     modulePrefix: MAIN_SPEC_PREFIX,
   },
   {
+    inputFile: './main.ts',
+    commandType: 'MozDebuggingCommand',
+    modulePrefix: 'BidiMozDebugging',
+  },
+  {
+    inputFile: './main.ts',
+    commandType: 'MozProfilerCommand',
+    modulePrefix: 'BidiMozProfiler',
+  },
+  {
     inputFile: './permissions.ts',
     commandType: 'PermissionsCommand',
     modulePrefix: 'BidiPermissions',

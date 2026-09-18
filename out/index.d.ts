@@ -19,6 +19,8 @@ type ExternalSpecCommand<T> = {
 export type Result = Bidi.ResultData;
 export type Command =
   | Bidi.Command
+  | ExternalSpecCommand<Bidi.MozDebuggingCommand>
+  | ExternalSpecCommand<Bidi.MozProfilerCommand>
   | ExternalSpecCommand<BidiPermissions.PermissionsCommand>
   | ExternalSpecCommand<BidiBluetooth.BluetoothCommand>
   | ExternalSpecCommand<BidiUaClientHints.UserAgentClientHintsCommand>;
@@ -27,4 +29,6 @@ type ExternalSpecEvent<T> = {
 } & T &
   Bidi.Extensible;
 export type Event =
-  Bidi.Event | ExternalSpecEvent<BidiBluetooth.BluetoothEvent>;
+  | Bidi.Event
+  | ExternalSpecEvent<Bidi.MozDebuggingEvent>
+  | ExternalSpecEvent<BidiBluetooth.BluetoothEvent>;

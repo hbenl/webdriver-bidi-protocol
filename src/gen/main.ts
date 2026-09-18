@@ -115,7 +115,8 @@ export namespace Session {
     platformName?: string;
     proxy?: Session.ProxyConfiguration;
     unhandledPromptBehavior?: Session.UserPromptHandler;
-  } & Extensible;
+  } & Extensible &
+    Session.CapabilityRequestExtension;
 }
 export namespace Session {
   export type ProxyConfiguration =
@@ -497,7 +498,7 @@ export namespace BrowsingContext {
     url: string;
     userContext: Browser.UserContext;
     parent?: BrowsingContext.BrowsingContext | null;
-  };
+  } & BrowsingContext.InfoExtension;
 }
 export namespace BrowsingContext {
   export type Locator =
@@ -611,6 +612,7 @@ export namespace BrowsingContext {
     origin?: 'viewport' | 'document';
     format?: BrowsingContext.ImageFormat;
     clip?: BrowsingContext.ClipRectangle;
+    imageSize?: BrowsingContext.ImageSize;
   };
 }
 export namespace BrowsingContext {
@@ -620,6 +622,18 @@ export namespace BrowsingContext {
      * Must be between `0` and `1`, inclusive.
      */
     quality?: number;
+  };
+}
+export namespace BrowsingContext {
+  export type ImageSize = {
+    /**
+     * Must be greater than or equal to `1`.
+     */
+    maxWidth?: JsUint;
+    /**
+     * Must be greater than or equal to `1`.
+     */
+    maxHeight?: JsUint;
   };
 }
 export namespace BrowsingContext {
@@ -701,7 +715,7 @@ export namespace BrowsingContext {
   export type GetTreeParameters = {
     maxDepth?: JsUint;
     root?: BrowsingContext.BrowsingContext;
-  };
+  } & BrowsingContext.GetTreeParametersExtension;
 }
 export namespace BrowsingContext {
   export type GetTreeResult = {
@@ -3105,7 +3119,7 @@ export namespace WebExtension {
 export namespace WebExtension {
   export type InstallParameters = {
     extensionData: WebExtension.ExtensionData;
-  };
+  } & WebExtension.InstallParametersExtension;
 }
 export namespace WebExtension {
   export type ExtensionData =
@@ -3149,4 +3163,352 @@ export namespace WebExtension {
 }
 export namespace WebExtension {
   export type UninstallResult = EmptyResult;
+}
+export namespace BrowsingContext {
+  export type GetTreeParametersExtension = {
+    'moz:scope'?: 'chrome' | 'content';
+  };
+}
+export namespace BrowsingContext {
+  export type InfoExtension = {
+    'moz:name'?: string;
+    'moz:scope'?: 'chrome' | 'content';
+  };
+}
+export namespace Session {
+  export type CapabilityRequestExtension = {
+    'moz:firefoxOptions'?: Session.CapabilityRequestFirefoxOptions;
+  };
+}
+export namespace Session {
+  export type CapabilityRequestFirefoxOptions = {
+    androidPackage?: string;
+    androidActivity?: string;
+    androidDeviceSerial?: string;
+    androidIntentArguments?: [...string[]];
+    args?: [...string[]];
+    binary?: string;
+    env?: {
+      [key: string]: string;
+    };
+    log?: {
+      /**
+       * @defaultValue `"info"`
+       */
+      level?:
+        'trace' | 'debug' | 'config' | 'info' | 'warn' | 'error' | 'fatal';
+    };
+    prefs?: {
+      [key: string]: string | boolean | JsInt;
+    };
+    profile?: string;
+  };
+}
+export namespace WebExtension {
+  export type InstallParametersExtension = {
+    /**
+     * @defaultValue `false`
+     */
+    'moz:allowPrivateBrowsing'?: boolean;
+    /**
+     * @defaultValue `false`
+     */
+    'moz:permanent'?: boolean;
+  };
+}
+export type MozDebuggingCommand =
+  | MozDebugging.GetScriptSource
+  | MozDebugging.ListScripts
+  | MozDebugging.RemoveBreakpoint
+  | MozDebugging.Resume
+  | MozDebugging.SetBreakpoint
+  | MozDebugging.SetDebuggerEnabled
+  | MozDebugging.StepInto
+  | MozDebugging.StepOut
+  | MozDebugging.StepOver;
+export type MozDebuggingResult =
+  | MozDebugging.GetScriptSourceResult
+  | MozDebugging.ListScriptsResult
+  | MozDebugging.RemoveBreakpointResult
+  | MozDebugging.ResumeResult
+  | MozDebugging.SetBreakpointResult
+  | MozDebugging.SetDebuggerEnabledResult
+  | MozDebugging.StepIntoResult
+  | MozDebugging.StepOutResult
+  | MozDebugging.StepOverResult;
+export type MozDebuggingEvent = MozDebugging.Paused | MozDebugging.Resumed;
+export namespace MozDebugging {
+  export type GetScriptSource = {
+    method: 'moz:debugging.getScriptSource';
+    params: MozDebugging.GetScriptSourceParameters;
+  };
+}
+export namespace MozDebugging {
+  export type GetScriptSourceParameters = {
+    context: BrowsingContext.BrowsingContext;
+    scriptUrl: string;
+  };
+}
+export namespace MozDebugging {
+  export type GetScriptSourceResult = {
+    source: string;
+  };
+}
+export namespace MozDebugging {
+  export type ListScripts = {
+    method: 'moz:debugging.listScripts';
+    params: MozDebugging.ListScriptsParameters;
+  };
+}
+export namespace MozDebugging {
+  export type ListScriptsParameters = {
+    context: BrowsingContext.BrowsingContext;
+  };
+}
+export namespace MozDebugging {
+  export type ListScriptsResult = {
+    scripts: [...string[]];
+  };
+}
+export namespace MozDebugging {
+  export type RemoveBreakpoint = {
+    method: 'moz:debugging.removeBreakpoint';
+    params: MozDebugging.RemoveBreakpointParameters;
+  };
+}
+export namespace MozDebugging {
+  export type RemoveBreakpointParameters = {
+    breakpoint: MozDebugging.BreakpointId;
+  };
+}
+export namespace MozDebugging {
+  export type RemoveBreakpointResult = EmptyResult;
+}
+export namespace MozDebugging {
+  export type BreakpointId = string;
+}
+export namespace MozDebugging {
+  export type Resume = {
+    method: 'moz:debugging.resume';
+    params: MozDebugging.ResumeParameters;
+  };
+}
+export namespace MozDebugging {
+  export type ResumeParameters = {
+    context: BrowsingContext.BrowsingContext;
+  };
+}
+export namespace MozDebugging {
+  export type ResumeResult = EmptyResult;
+}
+export namespace MozDebugging {
+  export type SetBreakpoint = {
+    method: 'moz:debugging.setBreakpoint';
+    params: MozDebugging.SetBreakpointParameters;
+  };
+}
+export namespace MozDebugging {
+  export type SetBreakpointParameters = {
+    location: MozDebugging.BaseLocation & {
+      column?: JsUint;
+    };
+  };
+}
+export namespace MozDebugging {
+  export type SetBreakpointResult = {
+    breakpoint: MozDebugging.BreakpointId;
+  };
+}
+export namespace MozDebugging {
+  export type BaseLocation = {
+    line: JsUint;
+    url: string;
+  };
+}
+export namespace MozDebugging {
+  export type SetDebuggerEnabled = {
+    method: 'moz:debugging.setDebuggerEnabled';
+    params: MozDebugging.SetDebuggerEnabledParameters;
+  };
+}
+export namespace MozDebugging {
+  export type SetDebuggerEnabledParameters = {
+    contexts?: [...BrowsingContext.BrowsingContext[]];
+    enabled: boolean | null;
+    userContexts?: [...Browser.UserContext[]];
+  };
+}
+export namespace MozDebugging {
+  export type SetDebuggerEnabledResult = EmptyResult;
+}
+export namespace MozDebugging {
+  export type StepInto = {
+    method: 'moz:debugging.stepInto';
+    params: MozDebugging.StepIntoParameters;
+  };
+}
+export namespace MozDebugging {
+  export type StepIntoParameters = {
+    context: BrowsingContext.BrowsingContext;
+  };
+}
+export namespace MozDebugging {
+  export type StepIntoResult = EmptyResult;
+}
+export namespace MozDebugging {
+  export type StepOut = {
+    method: 'moz:debugging.stepOut';
+    params: MozDebugging.StepOutParameters;
+  };
+}
+export namespace MozDebugging {
+  export type StepOutParameters = {
+    context: BrowsingContext.BrowsingContext;
+  };
+}
+export namespace MozDebugging {
+  export type StepOutResult = EmptyResult;
+}
+export namespace MozDebugging {
+  export type StepOver = {
+    method: 'moz:debugging.stepOver';
+    params: MozDebugging.StepOverParameters;
+  };
+}
+export namespace MozDebugging {
+  export type StepOverParameters = {
+    context: BrowsingContext.BrowsingContext;
+  };
+}
+export namespace MozDebugging {
+  export type StepOverResult = EmptyResult;
+}
+export namespace MozDebugging {
+  export type Paused = {
+    method: 'moz:debugging.paused';
+    params: MozDebugging.PausedParameters;
+  };
+}
+export namespace MozDebugging {
+  export type PausedParameters = {
+    context: BrowsingContext.BrowsingContext;
+    url: string;
+    line: JsUint;
+    column: JsUint;
+    callFrames: [...MozDebugging.PausedParametersCallFrame[]];
+  };
+}
+export namespace MozDebugging {
+  export type PausedParametersCallFrame = {
+    callFrameId: string;
+    functionName: string;
+    location: MozDebugging.BaseLocation & {
+      column: JsUint;
+    };
+    scopeChain: [...MozDebugging.PausedParametersScope[]];
+  };
+}
+export namespace MozDebugging {
+  export type PausedParametersScope = {
+    type: string;
+    variables: {
+      [key: string]: MozDebugging.PausedParametersScopeValue;
+    };
+  };
+}
+export namespace MozDebugging {
+  export type PausedParametersScopeValue =
+    | MozDebugging.PausedParametersScopeValueMissingArguments
+    | MozDebugging.PausedParametersScopeValueOptimizedOut
+    | MozDebugging.PausedParametersScopeValueUninitialized
+    | Script.RemoteValue;
+}
+export namespace MozDebugging {
+  export type PausedParametersScopeValueMissingArguments = {
+    type: 'missingArguments';
+  };
+}
+export namespace MozDebugging {
+  export type PausedParametersScopeValueOptimizedOut = {
+    type: 'optimizedOut';
+  };
+}
+export namespace MozDebugging {
+  export type PausedParametersScopeValueUninitialized = {
+    type: 'uninitialized';
+  };
+}
+export namespace MozDebugging {
+  export type Resumed = {
+    method: 'moz:debugging.resumed';
+    params: MozDebugging.ResumedParameters;
+  };
+}
+export namespace MozDebugging {
+  export type ResumedParameters = {
+    context: BrowsingContext.BrowsingContext;
+  };
+}
+export type MozProfilerCommand =
+  MozProfiler.IsActive | MozProfiler.Start | MozProfiler.Stop;
+export type MozProfilerResult =
+  MozProfiler.IsActiveResult | MozProfiler.StartResult | MozProfiler.StopResult;
+export namespace MozProfiler {
+  export type IsActive = {
+    method: 'moz:profiler.isActive';
+    params: EmptyParams;
+  };
+}
+export namespace MozProfiler {
+  export type IsActiveResult = {
+    active: boolean;
+  };
+}
+export namespace MozProfiler {
+  export type Start = {
+    method: 'moz:profiler.start';
+    params: MozProfiler.StartParameters;
+  };
+}
+export namespace MozProfiler {
+  export type StartParameters = (
+    MozProfiler.StartParametersPreset | MozProfiler.StartParametersOptions
+  ) & {
+    activeContext?: BrowsingContext.BrowsingContext;
+  };
+}
+export namespace MozProfiler {
+  export type StartParametersPreset = {
+    preset: string;
+  };
+}
+export namespace MozProfiler {
+  export type StartParametersOptions = {
+    entries: JsUint;
+    interval: JsUint;
+    features: [...string[]];
+    threads: [...string[]];
+  };
+}
+export namespace MozProfiler {
+  export type StartResult = EmptyResult;
+}
+export namespace MozProfiler {
+  export type Stop = {
+    method: 'moz:profiler.stop';
+    params: MozProfiler.StopParameters;
+  };
+}
+export namespace MozProfiler {
+  export type StopParameters = {
+    /**
+     * @defaultValue `false`
+     */
+    discard?: boolean;
+  };
+}
+export namespace MozProfiler {
+  export type StopResult = {
+    path: string | null;
+  };
 }

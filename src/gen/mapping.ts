@@ -1,4 +1,6 @@
 import type * as Bidi from './main.js';
+import type * as BidiMozDebugging from './main.js';
+import type * as BidiMozProfiler from './main.js';
 import type * as BidiPermissions from './permissions.js';
 import type * as BidiBluetooth from './web-bluetooth.js';
 import type * as BidiUaClientHints from './ua-client-hints.js';
@@ -203,6 +205,54 @@ export interface Commands {
   'input.setFiles': {
     params: Bidi.Input.SetFilesParameters;
     returnType: Bidi.Input.SetFilesResult;
+  };
+  'moz:debugging.getScriptSource': {
+    params: BidiMozDebugging.MozDebugging.GetScriptSourceParameters;
+    returnType: BidiMozDebugging.MozDebugging.GetScriptSourceResult;
+  };
+  'moz:debugging.listScripts': {
+    params: BidiMozDebugging.MozDebugging.ListScriptsParameters;
+    returnType: BidiMozDebugging.MozDebugging.ListScriptsResult;
+  };
+  'moz:debugging.removeBreakpoint': {
+    params: BidiMozDebugging.MozDebugging.RemoveBreakpointParameters;
+    returnType: BidiMozDebugging.MozDebugging.RemoveBreakpointResult;
+  };
+  'moz:debugging.resume': {
+    params: BidiMozDebugging.MozDebugging.ResumeParameters;
+    returnType: BidiMozDebugging.MozDebugging.ResumeResult;
+  };
+  'moz:debugging.setBreakpoint': {
+    params: BidiMozDebugging.MozDebugging.SetBreakpointParameters;
+    returnType: BidiMozDebugging.MozDebugging.SetBreakpointResult;
+  };
+  'moz:debugging.setDebuggerEnabled': {
+    params: BidiMozDebugging.MozDebugging.SetDebuggerEnabledParameters;
+    returnType: BidiMozDebugging.MozDebugging.SetDebuggerEnabledResult;
+  };
+  'moz:debugging.stepInto': {
+    params: BidiMozDebugging.MozDebugging.StepIntoParameters;
+    returnType: BidiMozDebugging.MozDebugging.StepIntoResult;
+  };
+  'moz:debugging.stepOut': {
+    params: BidiMozDebugging.MozDebugging.StepOutParameters;
+    returnType: BidiMozDebugging.MozDebugging.StepOutResult;
+  };
+  'moz:debugging.stepOver': {
+    params: BidiMozDebugging.MozDebugging.StepOverParameters;
+    returnType: BidiMozDebugging.MozDebugging.StepOverResult;
+  };
+  'moz:profiler.isActive': {
+    params: BidiMozProfiler.Extensible;
+    returnType: Bidi.EmptyResult;
+  };
+  'moz:profiler.start': {
+    params: BidiMozProfiler.MozProfiler.StartParameters;
+    returnType: BidiMozProfiler.MozProfiler.StartResult;
+  };
+  'moz:profiler.stop': {
+    params: BidiMozProfiler.MozProfiler.StopParameters;
+    returnType: BidiMozProfiler.MozProfiler.StopResult;
   };
   'network.addDataCollector': {
     params: Bidi.Network.AddDataCollectorParameters;

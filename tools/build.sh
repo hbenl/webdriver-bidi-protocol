@@ -16,7 +16,9 @@ git submodule update --init
 (cd specs/web-bluetooth && ../webdriver-bidi/scripts/cddl/generate.js index.bs)
 (cd specs/ua-client-hints && ../webdriver-bidi/scripts/cddl/generate.js index.bs)
 
-cddlconv specs/webdriver-bidi/all.cddl > src/gen/main.ts
+node ./tools/mergeMozExtensions.ts
+cddlconv moz/merged.cddl > src/gen/main.ts
+rm moz/merged.cddl
 cddlconv specs/permissions/all.cddl > src/gen/permissions.ts
 cddlconv specs/web-bluetooth/all.cddl > src/gen/web-bluetooth.ts
 cddlconv specs/ua-client-hints/all.cddl > src/gen/ua-client-hints.ts
