@@ -23,13 +23,18 @@ const specs: SpecType[] = [
   },
   {
     inputFile: './main.ts',
+    commandType: 'MozCommand',
+    modulePrefix: MAIN_SPEC_PREFIX,
+  },
+  {
+    inputFile: './main.ts',
     commandType: 'MozDebuggingCommand',
-    modulePrefix: 'BidiMozDebugging',
+    modulePrefix: MAIN_SPEC_PREFIX,
   },
   {
     inputFile: './main.ts',
     commandType: 'MozProfilerCommand',
-    modulePrefix: 'BidiMozProfiler',
+    modulePrefix: MAIN_SPEC_PREFIX,
   },
   {
     inputFile: './permissions.ts',
@@ -122,12 +127,17 @@ const generatedFile = project.createSourceFile(outputPath, '', {
   overwrite: true,
 });
 
+const importedModules = new Set<string>();
 for (const spec of specs) {
+  if (importedModules.has(spec.modulePrefix)) {
+    continue;
+  }
   generatedFile.addImportDeclaration({
     moduleSpecifier: spec.inputFile.replace('.ts', '.js'),
     isTypeOnly: true,
     namespaceImport: spec.modulePrefix,
   });
+  importedModules.add(spec.modulePrefix);
 }
 
 const mapInterface = generatedFile.addInterface({

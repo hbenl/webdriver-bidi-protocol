@@ -30,6 +30,7 @@ export type Result = Bidi.ResultData;
 
 export type Command =
   | Bidi.Command
+  | ExternalSpecCommand<Bidi.MozCommand>
   | ExternalSpecCommand<Bidi.MozDebuggingCommand>
   | ExternalSpecCommand<Bidi.MozProfilerCommand>
   | ExternalSpecCommand<BidiPermissions.PermissionsCommand>

@@ -1,6 +1,4 @@
 import type * as Bidi from './main.js';
-import type * as BidiMozDebugging from './main.js';
-import type * as BidiMozProfiler from './main.js';
 import type * as BidiPermissions from './permissions.js';
 import type * as BidiBluetooth from './web-bluetooth.js';
 import type * as BidiUaClientHints from './ua-client-hints.js';
@@ -207,52 +205,52 @@ export interface Commands {
     returnType: Bidi.Input.SetFilesResult;
   };
   'moz:debugging.getScriptSource': {
-    params: BidiMozDebugging.MozDebugging.GetScriptSourceParameters;
-    returnType: BidiMozDebugging.MozDebugging.GetScriptSourceResult;
+    params: Bidi.MozDebugging.GetScriptSourceParameters;
+    returnType: Bidi.MozDebugging.GetScriptSourceResult;
   };
   'moz:debugging.listScripts': {
-    params: BidiMozDebugging.MozDebugging.ListScriptsParameters;
-    returnType: BidiMozDebugging.MozDebugging.ListScriptsResult;
+    params: Bidi.MozDebugging.ListScriptsParameters;
+    returnType: Bidi.MozDebugging.ListScriptsResult;
   };
   'moz:debugging.removeBreakpoint': {
-    params: BidiMozDebugging.MozDebugging.RemoveBreakpointParameters;
-    returnType: BidiMozDebugging.MozDebugging.RemoveBreakpointResult;
+    params: Bidi.MozDebugging.RemoveBreakpointParameters;
+    returnType: Bidi.MozDebugging.RemoveBreakpointResult;
   };
   'moz:debugging.resume': {
-    params: BidiMozDebugging.MozDebugging.ResumeParameters;
-    returnType: BidiMozDebugging.MozDebugging.ResumeResult;
+    params: Bidi.MozDebugging.ResumeParameters;
+    returnType: Bidi.MozDebugging.ResumeResult;
   };
   'moz:debugging.setBreakpoint': {
-    params: BidiMozDebugging.MozDebugging.SetBreakpointParameters;
-    returnType: BidiMozDebugging.MozDebugging.SetBreakpointResult;
+    params: Bidi.MozDebugging.SetBreakpointParameters;
+    returnType: Bidi.MozDebugging.SetBreakpointResult;
   };
   'moz:debugging.setDebuggerEnabled': {
-    params: BidiMozDebugging.MozDebugging.SetDebuggerEnabledParameters;
-    returnType: BidiMozDebugging.MozDebugging.SetDebuggerEnabledResult;
+    params: Bidi.MozDebugging.SetDebuggerEnabledParameters;
+    returnType: Bidi.MozDebugging.SetDebuggerEnabledResult;
   };
   'moz:debugging.stepInto': {
-    params: BidiMozDebugging.MozDebugging.StepIntoParameters;
-    returnType: BidiMozDebugging.MozDebugging.StepIntoResult;
+    params: Bidi.MozDebugging.StepIntoParameters;
+    returnType: Bidi.MozDebugging.StepIntoResult;
   };
   'moz:debugging.stepOut': {
-    params: BidiMozDebugging.MozDebugging.StepOutParameters;
-    returnType: BidiMozDebugging.MozDebugging.StepOutResult;
+    params: Bidi.MozDebugging.StepOutParameters;
+    returnType: Bidi.MozDebugging.StepOutResult;
   };
   'moz:debugging.stepOver': {
-    params: BidiMozDebugging.MozDebugging.StepOverParameters;
-    returnType: BidiMozDebugging.MozDebugging.StepOverResult;
+    params: Bidi.MozDebugging.StepOverParameters;
+    returnType: Bidi.MozDebugging.StepOverResult;
   };
   'moz:profiler.isActive': {
-    params: BidiMozProfiler.Extensible;
-    returnType: Bidi.EmptyResult;
+    params: Bidi.Extensible;
+    returnType: Bidi.MozProfiler.IsActiveResult;
   };
   'moz:profiler.start': {
-    params: BidiMozProfiler.MozProfiler.StartParameters;
-    returnType: BidiMozProfiler.MozProfiler.StartResult;
+    params: Bidi.MozProfiler.StartParameters;
+    returnType: Bidi.MozProfiler.StartResult;
   };
   'moz:profiler.stop': {
-    params: BidiMozProfiler.MozProfiler.StopParameters;
-    returnType: BidiMozProfiler.MozProfiler.StopResult;
+    params: Bidi.MozProfiler.StopParameters;
+    returnType: Bidi.MozProfiler.StopResult;
   };
   'network.addDataCollector': {
     params: Bidi.Network.AddDataCollectorParameters;
@@ -377,6 +375,10 @@ export interface Commands {
   'webExtension.install': {
     params: Bidi.WebExtension.InstallParameters;
     returnType: Bidi.WebExtension.InstallResult;
+  };
+  'webExtension.moz:listExtensions': {
+    params: Bidi.Extensible;
+    returnType: Bidi.WebExtension.MozListExtensionsResult;
   };
   'webExtension.uninstall': {
     params: Bidi.WebExtension.UninstallParameters;

@@ -3221,6 +3221,40 @@ export declare namespace WebExtension {
     'moz:permanent'?: boolean;
   };
 }
+export type MozCommand = WebExtension.MozListExtensions;
+export declare namespace WebExtension {
+  type MozListExtensions = {
+    method: 'webExtension.moz:listExtensions';
+    params: EmptyParams;
+  };
+}
+export declare namespace WebExtension {
+  type MozListExtensionsResult = {
+    extensions: [...WebExtension.MozExtensionInfo[]];
+  };
+}
+export declare namespace WebExtension {
+  type MozExtensionInfo = {
+    id: string;
+    name: string;
+    version: string;
+    manifestVersion: JsUint;
+    isActive: boolean;
+    isSystem: boolean;
+    hidden: boolean;
+    temporarilyInstalled: boolean;
+    sourceURL?: string | null;
+    policy?: WebExtension.MozExtensionPolicyInfo | null;
+  };
+}
+export declare namespace WebExtension {
+  type MozExtensionPolicyInfo = {
+    uuid: string;
+    baseURL: string;
+    extensionURL: string;
+    backgroundScripts: [...string[]];
+  };
+}
 export type MozDebuggingCommand =
   | MozDebugging.GetScriptSource
   | MozDebugging.ListScripts
