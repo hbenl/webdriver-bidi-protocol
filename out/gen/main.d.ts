@@ -117,6 +117,20 @@ export declare namespace Session {
     Session.CapabilityRequestExtension;
 }
 export declare namespace Session {
+  type CapabilityResponse = {
+    acceptInsecureCerts: boolean;
+    browserName: string;
+    browserVersion: string;
+    platformName: string;
+    setWindowRect: boolean;
+    userAgent: string;
+    proxy?: Session.ProxyConfiguration;
+    unhandledPromptBehavior?: Session.UserPromptHandler;
+    webSocketUrl?: string;
+  } & Extensible &
+    Session.CapabilityResponseExtension;
+}
+export declare namespace Session {
   type ProxyConfiguration =
     | Session.AutodetectProxyConfiguration
     | Session.DirectProxyConfiguration
@@ -231,17 +245,7 @@ export declare namespace Session {
 export declare namespace Session {
   type NewResult = {
     sessionId: string;
-    capabilities: {
-      acceptInsecureCerts: boolean;
-      browserName: string;
-      browserVersion: string;
-      platformName: string;
-      setWindowRect: boolean;
-      userAgent: string;
-      proxy?: Session.ProxyConfiguration;
-      unhandledPromptBehavior?: Session.UserPromptHandler;
-      webSocketUrl?: string;
-    } & Extensible;
+    capabilities: Session.CapabilityResponse;
   };
 }
 export declare namespace Session {
@@ -488,7 +492,7 @@ export declare namespace BrowsingContext {
   type InfoList = [...BrowsingContext.Info[]];
 }
 export declare namespace BrowsingContext {
-  type Info = {
+  type BaseInfo = {
     children: BrowsingContext.InfoList | null;
     clientWindow: Browser.ClientWindow;
     context: BrowsingContext.BrowsingContext;
@@ -496,7 +500,10 @@ export declare namespace BrowsingContext {
     url: string;
     userContext: Browser.UserContext;
     parent?: BrowsingContext.BrowsingContext | null;
-  } & BrowsingContext.InfoExtension;
+  };
+}
+export declare namespace BrowsingContext {
+  type Info = BrowsingContext.BaseInfo & BrowsingContext.InfoExtension;
 }
 export declare namespace BrowsingContext {
   type Locator =
@@ -930,6 +937,7 @@ export declare namespace BrowsingContext {
 export declare namespace BrowsingContext {
   type StartScreencastParameters = {
     context: BrowsingContext.BrowsingContext;
+    destinationFolder?: string;
     mimeType?: string;
     video?: BrowsingContext.MediaTrackConstraints;
     /**
@@ -989,7 +997,12 @@ export declare namespace BrowsingContext {
 export declare namespace BrowsingContext {
   type ContextCreated = {
     method: 'browsingContext.contextCreated';
-    params: BrowsingContext.Info;
+    params: BrowsingContext.ContextCreatedParameters;
+  };
+}
+export declare namespace BrowsingContext {
+  type ContextCreatedParameters = BrowsingContext.BaseInfo & {
+    hasPlannedNavigation: boolean;
   };
 }
 export declare namespace BrowsingContext {
@@ -1131,6 +1144,7 @@ export type EmulationCommand =
   | Emulation.SetScreenSettingsOverride
   | Emulation.SetScriptingEnabled
   | Emulation.SetScrollbarTypeOverride
+  | Emulation.SetTextLayoutModeOverride
   | Emulation.SetTimezoneOverride
   | Emulation.SetTouchOverride
   | Emulation.SetUserAgentOverride
@@ -1143,6 +1157,7 @@ export type EmulationResult =
   | Emulation.SetScreenOrientationOverrideResult
   | Emulation.SetScriptingEnabledResult
   | Emulation.SetScrollbarTypeOverrideResult
+  | Emulation.SetTextLayoutModeOverrideResult
   | Emulation.SetTimezoneOverrideResult
   | Emulation.SetTouchOverrideResult
   | Emulation.SetUserAgentOverrideResult
@@ -1491,6 +1506,28 @@ export declare namespace Emulation {
 }
 export declare namespace Emulation {
   type SetScrollbarTypeOverrideResult = EmptyResult;
+}
+export declare namespace Emulation {
+  type SetTextLayoutModeOverride = {
+    method: 'emulation.setTextLayoutModeOverride';
+    params: Emulation.SetTextLayoutModeOverrideParameters;
+  };
+}
+export declare namespace Emulation {
+  type SetTextLayoutModeOverrideParameters = {
+    textLayoutMode: Emulation.TextLayoutMode | null;
+    contexts?: [
+      BrowsingContext.BrowsingContext,
+      ...BrowsingContext.BrowsingContext[],
+    ];
+    userContexts?: [Browser.UserContext, ...Browser.UserContext[]];
+  };
+}
+export declare namespace Emulation {
+  type TextLayoutMode = 'mobile';
+}
+export declare namespace Emulation {
+  type SetTextLayoutModeOverrideResult = EmptyResult;
 }
 export declare namespace Emulation {
   type SetTimezoneOverride = {
@@ -3207,6 +3244,16 @@ export declare namespace Session {
       [key: string]: string | boolean | JsInt;
     };
     profile?: string;
+  };
+}
+export declare namespace Session {
+  type CapabilityResponseExtension = {
+    'moz:buildID'?: string;
+    'moz:headless'?: boolean;
+    'moz:platformVersion'?: string;
+    'moz:processID'?: JsUint;
+    'moz:profile'?: string;
+    'moz:shutdownTimeout'?: JsUint;
   };
 }
 export declare namespace WebExtension {

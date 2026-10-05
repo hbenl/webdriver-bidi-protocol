@@ -43,6 +43,7 @@ handleEvent({
     userContext: '',
     originalOpener: null,
     clientWindow: '',
+    hasPlannedNavigation: true,
   },
 });
 

@@ -119,6 +119,20 @@ export namespace Session {
     Session.CapabilityRequestExtension;
 }
 export namespace Session {
+  export type CapabilityResponse = {
+    acceptInsecureCerts: boolean;
+    browserName: string;
+    browserVersion: string;
+    platformName: string;
+    setWindowRect: boolean;
+    userAgent: string;
+    proxy?: Session.ProxyConfiguration;
+    unhandledPromptBehavior?: Session.UserPromptHandler;
+    webSocketUrl?: string;
+  } & Extensible &
+    Session.CapabilityResponseExtension;
+}
+export namespace Session {
   export type ProxyConfiguration =
     | Session.AutodetectProxyConfiguration
     | Session.DirectProxyConfiguration
@@ -233,17 +247,7 @@ export namespace Session {
 export namespace Session {
   export type NewResult = {
     sessionId: string;
-    capabilities: {
-      acceptInsecureCerts: boolean;
-      browserName: string;
-      browserVersion: string;
-      platformName: string;
-      setWindowRect: boolean;
-      userAgent: string;
-      proxy?: Session.ProxyConfiguration;
-      unhandledPromptBehavior?: Session.UserPromptHandler;
-      webSocketUrl?: string;
-    } & Extensible;
+    capabilities: Session.CapabilityResponse;
   };
 }
 export namespace Session {
@@ -490,7 +494,7 @@ export namespace BrowsingContext {
   export type InfoList = [...BrowsingContext.Info[]];
 }
 export namespace BrowsingContext {
-  export type Info = {
+  export type BaseInfo = {
     children: BrowsingContext.InfoList | null;
     clientWindow: Browser.ClientWindow;
     context: BrowsingContext.BrowsingContext;
@@ -498,7 +502,10 @@ export namespace BrowsingContext {
     url: string;
     userContext: Browser.UserContext;
     parent?: BrowsingContext.BrowsingContext | null;
-  } & BrowsingContext.InfoExtension;
+  };
+}
+export namespace BrowsingContext {
+  export type Info = BrowsingContext.BaseInfo & BrowsingContext.InfoExtension;
 }
 export namespace BrowsingContext {
   export type Locator =
@@ -931,6 +938,7 @@ export namespace BrowsingContext {
 export namespace BrowsingContext {
   export type StartScreencastParameters = {
     context: BrowsingContext.BrowsingContext;
+    destinationFolder?: string;
     mimeType?: string;
     video?: BrowsingContext.MediaTrackConstraints;
     /**
@@ -990,7 +998,12 @@ export namespace BrowsingContext {
 export namespace BrowsingContext {
   export type ContextCreated = {
     method: 'browsingContext.contextCreated';
-    params: BrowsingContext.Info;
+    params: BrowsingContext.ContextCreatedParameters;
+  };
+}
+export namespace BrowsingContext {
+  export type ContextCreatedParameters = BrowsingContext.BaseInfo & {
+    hasPlannedNavigation: boolean;
   };
 }
 export namespace BrowsingContext {
@@ -1132,6 +1145,7 @@ export type EmulationCommand =
   | Emulation.SetScreenSettingsOverride
   | Emulation.SetScriptingEnabled
   | Emulation.SetScrollbarTypeOverride
+  | Emulation.SetTextLayoutModeOverride
   | Emulation.SetTimezoneOverride
   | Emulation.SetTouchOverride
   | Emulation.SetUserAgentOverride
@@ -1144,6 +1158,7 @@ export type EmulationResult =
   | Emulation.SetScreenOrientationOverrideResult
   | Emulation.SetScriptingEnabledResult
   | Emulation.SetScrollbarTypeOverrideResult
+  | Emulation.SetTextLayoutModeOverrideResult
   | Emulation.SetTimezoneOverrideResult
   | Emulation.SetTouchOverrideResult
   | Emulation.SetUserAgentOverrideResult
@@ -1489,6 +1504,28 @@ export namespace Emulation {
 }
 export namespace Emulation {
   export type SetScrollbarTypeOverrideResult = EmptyResult;
+}
+export namespace Emulation {
+  export type SetTextLayoutModeOverride = {
+    method: 'emulation.setTextLayoutModeOverride';
+    params: Emulation.SetTextLayoutModeOverrideParameters;
+  };
+}
+export namespace Emulation {
+  export type SetTextLayoutModeOverrideParameters = {
+    textLayoutMode: Emulation.TextLayoutMode | null;
+    contexts?: [
+      BrowsingContext.BrowsingContext,
+      ...BrowsingContext.BrowsingContext[],
+    ];
+    userContexts?: [Browser.UserContext, ...Browser.UserContext[]];
+  };
+}
+export namespace Emulation {
+  export type TextLayoutMode = 'mobile';
+}
+export namespace Emulation {
+  export type SetTextLayoutModeOverrideResult = EmptyResult;
 }
 export namespace Emulation {
   export type SetTimezoneOverride = {
@@ -3202,6 +3239,16 @@ export namespace Session {
       [key: string]: string | boolean | JsInt;
     };
     profile?: string;
+  };
+}
+export namespace Session {
+  export type CapabilityResponseExtension = {
+    'moz:buildID'?: string;
+    'moz:headless'?: boolean;
+    'moz:platformVersion'?: string;
+    'moz:processID'?: JsUint;
+    'moz:profile'?: string;
+    'moz:shutdownTimeout'?: JsUint;
   };
 }
 export namespace WebExtension {
